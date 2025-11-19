@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FutMark</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="header">
+         <form class="header-left" action="/listings" method="get">
+            <button type="submit" class="header-title">⚽ FutMark</button>
+        </form>
+        <a href="/listings/new" class="add-btn">+ New Match</a>
+        <a href="/notes" class="add-btn"> Notes</a>
+    </div>
+
+    <div class="container">
+        <% if(allListings.length===0) { %>
+            <div class="empty-state">
+                <div class="empty-icon">⚽</div>
+                <div class="empty-title">No matches yet</div>
+                <div class="empty-text">Create your first futsal match to get started</div>
+            </div>
+            <% } else { %>
+                <div class="matches-container">
+                    <% allListings.forEach(listing=> { %>
+                        <div class="match-card">
+                            <div class="match-header">
+                                <div class="match-title">
+                                    <%= listing.title %>
+                                </div>
+                                <div class="match-venue">
+                                    <%= listing.place %>
+                                </div>
+                            </div>
+
+                            <div class="match-body">
+                                  <div class="match-description">
+                                    <%= listing.description %>
+                                </div>
+                                <div class="match-time">
+                                    <div class="time-info">
+                                        <span class="time-icon">🕐</span>
+                                        <div>
+                                            <div class="time-text">
+                                                <%= listing.time %>
+                                            </div>
+                                            <div class="date-text">
+                                                <%= listing.date.toLocaleDateString() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                              
+
+                                <% if(listing.listOfPlayers && listing.listOfPlayers.length> 0) { %>
+                                    <div class="players-section">
+                                        <div class="players-header">Players (<%= listing.listOfPlayers.length %>)</div>
+                                        <div class="players-list">
+                                            <% listing.listOfPlayers.forEach(player=> { %>
+                                                <span class="player-tag">
+                                                    <%= player %>
+                                                </span>
+                                                <% }) %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                            </div>
+
+                            <div class="match-actions">
+                                <a href="/listings/<%= listing._id %>/edit" class="edit-btn">Edit Match</a>
+                              <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+                                    <button class="del-btn" type="submit">Delete</button>
+                              </form>
+                            </div>
+
+                        </div>
+                        <% }) %>
+                </div>
+                <% } %>
+    </div>
+</body>
+
+</html>

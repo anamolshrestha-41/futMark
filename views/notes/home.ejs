@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FutMark</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="header">
+        <form class="header-left" action="/listings" method="get">
+            <button type="submit" class="header-title">⚽ FutMark</button>
+        </form>
+        <a href="/listings/new" class="add-btn">+ New Match</a>
+        <a href="/notes/new" class="add-btn"> + Notes</a>
+    </div>
+
+    <div class="container">
+        <% if(allNotes.length===0) { %>
+            <div class="empty-state">
+                <div class="empty-icon">📓</div>
+                <div class="empty-title">No notes yet</div>
+                <div class="empty-text">Create your first note to get started</div>
+            </div>
+            <% } else { %>
+                <div class="notes-container">
+                    <div class="notes-table">
+                        <div class="notes-table-header">
+                            <div class="notes-table-title">My Notes</div>
+                            <div class="notes-count">
+                                <%= allNotes.length %> notes
+                            </div>
+                        </div>
+                        <% allNotes.forEach((notes, index)=> { %>
+                            <div class="note-row">
+                                <div class="note-index">
+                                    <%= index + 1 %>
+                                </div>
+                                <div class="note-content">
+                                    <div class="note-title">
+                                        <%= notes.title %>
+                                    </div>
+                                    <div class="note-description">
+                                        <%= notes.description %>
+                                    </div>
+                                </div>
+
+                                <div class="note-actions">
+                                    <a href="/notes/<%=notes._id%>/edit" class="note-edit-btn" title="Edit">✏️</a>
+
+                                    <form action="/notes/<%= notes._id %>/?_method=DELETE"
+                                        method="post">
+                                        <button type="submit" class="note-delete-btn" title="Delete">🗑️</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+                <% } %>
+    </div>
+</body>
+
+</html>
