@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("layout/boilerPlate") %> 
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FutMark</title>
-    <link rel="stylesheet" href="/style.css">
-</head>
-
-<body>
     <div class="header">
         <form class="header-left" action="/listings" method="get">
-            <button type="submit" class="header-title">⚽ FutMark</button>
+            <button type="submit" class="header-title"> FutMark</button>
         </form>
         <a href="/listings/new" class="add-btn">+ New Match</a>
         <a href="/notes/new" class="add-btn"> + Notes</a>
@@ -62,6 +53,3 @@
                 </div>
                 <% } %>
     </div>
-</body>
-
-</html>

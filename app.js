@@ -9,10 +9,18 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const ejs = require("ejs");
+const flash= require("connect-flash");
+const expressSession= require("express-session");
 
 //model
 const Listing= require("./models/listings");
-const Note=require("./models/notes")
+const Note=require("./models/notes");
+//error handler
+const ExpressError = require("./utils/ExpressError");
+
+//router
+const listingRouter= require("./router/listing");
+const noteRouter= require("./router/note");
 
 main()
 .then(() => {
@@ -36,142 +44,51 @@ app.engine("ejs", ejsMate);
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+//session
+const sessionOptions=({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie:{
+        expires: Date.now()+7*24*60*60*1000,
+        maxAge: 7*24*60*60*1000,
+        httpOnly: true
+    }
+})
+
+
+
+app.use(expressSession(sessionOptions));
+
+//flash
+app.use(flash());
+app.use((req,res,next)=>{
+    res.locals.success=req.flash("success");
+    res.locals.error=req.flash("error");
+    next();
+})
+
+
+// app.get("/",(req, res)=>{
+//     res.send("Add /listings at top url for homepage.")
+// })
+
+
+app.use("/listings", listingRouter);
+app.use("/notes", noteRouter);
+
 app.get("/",(req, res)=>{
-    res.send("Add /listings at top url for homepage.")
+    res.redirect("/listings")
 })
 
-//Read
-app.get("/listings", async(req, res) => {
-    try {
-        const allListings = await Listing.find({});
-        res.render("listings/index.ejs", { allListings });
-    } catch (err) {
-        console.error("Database Error:", err.message);
-        // Fallback with empty array if database fails
-        res.render("listings/index.ejs", { allListings: [] });
-    }
-});
-
-//Create
-app.get("/listings/new",(req, res)=>{
-    res.render("listings/new.ejs");
+app.all(/.*/, (req, res, next)=>{
+    next(new ExpressError ("Page not found!", 404));
 })
 
-app.post("/listings", async(req, res)=>{
-    try{
-        let {title, description, time, date, place, players}= req.body;
-        let newListing= new Listing({
-            title: title,
-            description: description,
-            time: time,
-            date:date,
-            place: place,
-            listOfPlayers: players ? players.split(",").map(p => p.trim()) : []
-        });
-        await newListing.save();
-        res.redirect("/listings");
-
-    }
-    catch(err){
-          console.error("Database Error:", err.message);
-        // Fallback with empty array if database fails
-        res.render("listings/index.ejs", { allListings: [] });
-    }
+app.use((err, req, res, next)=>{
+    let { statusCode=500, message="Something Went Wrong!!"}= err;
+    res.status(statusCode).render("error.ejs", {err});
 })
-
-//edit listing
-app.get("/listings/:id/edit", async(req, res)=>{
-    let {id}= req.params;
-    await Listing.findById(id).then((listing)=>{
-        res.render("listings/edit.ejs", {listing})
-    }). catch((err)=>{
-        res.redirect("/listings")
-    })
-})
-
-app.put("/listings/:id", async(req,res)=>{
-    try {
-        let {id} = req.params;
-        let {listing} = req.body;
-        
-        // Handle players array conversion
-        if (listing.listOfPlayers && typeof listing.listOfPlayers === 'string') {
-            listing.listOfPlayers = listing.listOfPlayers.split(',').map(p => p.trim()).filter(Boolean);
-        }
-        
-        await Listing.findByIdAndUpdate(id, listing);
-        res.redirect("/listings");
-    } catch(err) {
-        console.error("Update Error:", err.message);
-        res.redirect("/listings");
-    }
-})
-
-app.delete("/listings/:id", async(req, res)=>{
-    let { id } = req.params;
-    await Listing.findByIdAndDelete(id);
-    res.redirect("/listings");
-})
-
-//notes: like phone numbers and blablabla...
-//Read
-app.get("/notes", async(req, res) => {
-    try {
-        const allNotes = await Note.find({});
-        res.render("notes/Home.ejs", { allNotes });
-    } catch (err) {
-        console.error("Database Error:", err.message);
-        // Fallback with empty array if database fails
-        res.render("notes/Home.ejs", { allNotes: [] });
-    }
-});
-//create
-app.get("/notes/new", (req, res)=>{
-    res.render("notes/create.ejs");
-})
-app.post("/notes", async (req,res)=>{
-try{
-        let{title, description}= req.body;
-        let newNote= new Note({
-            title: title,
-            description: description
-        });
-        await newNote.save();
-        res.redirect("/notes");
-} catch(err){
-     console.error("Database Error:", err.message);
-        // Fallback with empty array if database fails
-        res.render("notes/home.ejs", { allNotes: [] });
-}
-})
-
-//edit
-app.get("/notes/:id/edit",async(req,res)=>{
-    let {id}= req.params;
-    await Note.findById(id).then((note)=>{
-        res.render("notes/editNote.ejs", {note});
-    }).catch((err)=>{
-        res.redirect("/notes")
-    })
-})
-app.put("/notes/:id", async(req, res)=>{
-    try{
-        let {id}= req.params;
-        let {note}= req.body;
-        await Note.findByIdAndUpdate(id, note);
-        res.redirect("/notes")
-    }catch(err){
-        console.error("Update Error:", err.message);
-        res.redirect("/notes");
-    }
-})
-//delete
-app.delete("/notes/:id", async(req,res)=>{
-    let {id}= req.params;
-    await Note.findByIdAndDelete(id);
-    res.redirect("/notes");
-})
-
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);

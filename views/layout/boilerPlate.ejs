@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FutMark</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .date-picker {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .quick-dates {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-date-btn {
+            background: #2a2f3e;
+            color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quick-date-btn:hover {
+            background: #00d4aa;
+            color: #0a0e1a;
+        }
+        
+        .quick-date-btn.active {
+            background: #00d4aa;
+            color: #0a0e1a;
+        }
+        
+        .del-btn {
+            background: #ff4757;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .del-btn:hover {
+            background: #ff3742;
+        }
+    </style>
+</head>
+<body>
+    <%- include("../includes/flash") %>
+    <%- body %>
+</body>
+</html>

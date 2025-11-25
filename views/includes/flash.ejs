@@ -1,0 +1,13 @@
+<%if(success && success.length>0) {%>
+<div class="success " role="alert">
+ <%= success %>
+ <button type="button" class="btn-close" data-bs-dsmiss="alert" aria-label="Close"></button>
+  </div> 
+  <%}%>
+
+  <%if(error && error.length>0) {%>
+<div class="error" role="alert">
+ <%= error %>
+ <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div> 
+  <%}%>
