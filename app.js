@@ -11,14 +11,17 @@ const methodOverride = require("method-override");
 const ejs = require("ejs");
 const flash= require("connect-flash");
 const expressSession= require("express-session");
+const cookie= require("cookie-parser");
 
 //model
+const User= require("./models/user");
 const Listing= require("./models/listings");
 const Note=require("./models/notes");
 //error handler
 const ExpressError = require("./utils/ExpressError");
 
 //router
+const userRouter= require("./router/user")
 const listingRouter= require("./router/listing");
 const noteRouter= require("./router/note");
 
@@ -44,6 +47,7 @@ app.engine("ejs", ejsMate);
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(cookie())
 //session
 const sessionOptions=({
     secret: process.env.SECRET,
@@ -55,6 +59,7 @@ const sessionOptions=({
         httpOnly: true
     }
 })
+
 
 
 
@@ -73,7 +78,7 @@ app.use((req,res,next)=>{
 //     res.send("Add /listings at top url for homepage.")
 // })
 
-
+// app.use("/user", userRouter)
 app.use("/listings", listingRouter);
 app.use("/notes", noteRouter);
 

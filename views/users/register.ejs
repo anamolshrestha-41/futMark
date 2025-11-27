@@ -1,0 +1,173 @@
+<% layout("/layout/boilerPlate") %>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <span class="logo-icon">⚽</span>
+                <span class="logo-text">FutMark</span>
+            </div>
+            <p class="auth-subtitle">Sign up to organize your futsal matches</p>
+        </div>
+        
+        <form action="/user/register" method="POST" class="auth-form">
+            <div class="form-group">
+                <input class="form-input" type="text" name="username" placeholder="Username" required minlength="3">
+            </div>
+            
+            <div class="form-group">
+                <input class="form-input" type="email" name="email" placeholder="Email" required>
+            </div>
+            
+            <div class="form-group">
+                <input class="form-input" type="password" name="password" placeholder="Password" required minlength="8">
+            </div>
+            
+            <p class="auth-terms">
+                By signing up, you agree to our Terms and Privacy Policy.
+            </p>
+            
+            <button class="auth-btn" type="submit">Sign Up</button>
+        </form>
+    </div>
+    
+    <div class="auth-extra">
+        <p>Have an account? <a href="/user/login" class="auth-link">Log in</a></p>
+    </div>
+</div>
+
+<style>
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #fafafa;
+}
+
+.auth-card {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.logo-icon {
+    font-size: 32px;
+    margin-right: 8px;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #262626;
+    letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+    color: #8e8e8e;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.auth-form {
+    margin-bottom: 24px;
+}
+
+.auth-terms {
+    color: #8e8e8e;
+    font-size: 12px;
+    text-align: center;
+    margin: 16px 0 8px 0;
+    line-height: 1.4;
+}
+
+.auth-btn {
+    width: 100%;
+    background: #0095f6;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-top: 8px;
+}
+
+.auth-btn:hover {
+    background: #1877f2;
+}
+
+.auth-btn:active {
+    background: #0064c7;
+    transform: scale(0.98);
+}
+
+.auth-footer {
+    text-align: center;
+}
+
+.auth-footer p {
+    color: #262626;
+    font-size: 14px;
+    margin: 0;
+}
+
+.auth-link {
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+.auth-extra {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    margin-top: 16px;
+}
+
+.auth-extra p {
+    color: #262626;
+    font-size: 14px;
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 32px 24px;
+        margin: 0 16px;
+    }
+    
+    .auth-extra {
+        margin: 16px;
+    }
+}
+</style>

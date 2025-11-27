@@ -1,13 +1,117 @@
 <%if(success && success.length>0) {%>
-<div class="success " role="alert">
- <%= success %>
- <button type="button" class="btn-close" data-bs-dsmiss="alert" aria-label="Close"></button>
-  </div> 
-  <%}%>
+<div class="flash-message flash-success" role="alert">
+    <div class="flash-content">
+        <span class="flash-icon">✓</span>
+        <span class="flash-text"><%= success %></span>
+    </div>
+    <button type="button" class="flash-close" onclick="this.parentElement.style.display='none'">&times;</button>
+</div> 
+<%}%>
 
-  <%if(error && error.length>0) {%>
-<div class="error" role="alert">
- <%= error %>
- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div> 
-  <%}%>
+<%if(error && error.length>0) {%>
+<div class="flash-message flash-error" role="alert">
+    <div class="flash-content">
+        <span class="flash-icon">⚠</span>
+        <span class="flash-text"><%= error %></span>
+    </div>
+    <button type="button" class="flash-close" onclick="this.parentElement.style.display='none'">&times;</button>
+</div> 
+<%}%>
+
+<style>
+.flash-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+    max-width: 400px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.flash-success {
+    border-left: 4px solid #00c896;
+}
+
+.flash-error {
+    border-left: 4px solid #ed4956;
+}
+
+.flash-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.flash-icon {
+    font-size: 16px;
+    margin-right: 12px;
+    font-weight: bold;
+}
+
+.flash-success .flash-icon {
+    color: #00c896;
+}
+
+.flash-error .flash-icon {
+    color: #ed4956;
+}
+
+.flash-text {
+    color: #262626;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.flash-close {
+    background: none;
+    border: none;
+    color: #8e8e8e;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 16px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.15s ease;
+}
+
+.flash-close:hover {
+    background: #f5f5f5;
+    color: #262626;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .flash-message {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
+}
+</style>

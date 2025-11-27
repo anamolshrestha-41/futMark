@@ -1,0 +1,190 @@
+<% layout("/layout/boilerPlate") %>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <span class="logo-icon">⚽</span>
+                <span class="logo-text">FutMark</span>
+            </div>
+            <p class="auth-subtitle">Sign in to manage your futsal matches</p>
+        </div>
+        
+        <form action="/user/login" method="POST" class="auth-form">
+            <div class="form-group">
+                <input class="form-input" type="email" name="email" placeholder="Email" required>
+            </div>
+            
+            <div class="form-group">
+                <input class="form-input" type="password" name="password" placeholder="Password" required>
+            </div>
+            
+            <button class="auth-btn" type="submit">Log In</button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>OR</span>
+        </div>
+        
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="/user/register" class="auth-link">Sign up</a></p>
+        </div>
+    </div>
+    
+    <div class="auth-extra">
+        <p>Get back to your <a href="/listings" class="auth-link">matches</a></p>
+    </div>
+</div>
+
+<style>
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #fafafa;
+}
+
+.auth-card {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.logo-icon {
+    font-size: 32px;
+    margin-right: 8px;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #262626;
+    letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+    color: #8e8e8e;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.auth-form {
+    margin-bottom: 24px;
+}
+
+.auth-btn {
+    width: 100%;
+    background: #0095f6;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-top: 8px;
+}
+
+.auth-btn:hover {
+    background: #1877f2;
+}
+
+.auth-btn:active {
+    background: #0064c7;
+    transform: scale(0.98);
+}
+
+.auth-divider {
+    text-align: center;
+    margin: 24px 0;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #dbdbdb;
+}
+
+.auth-divider span {
+    background: #ffffff;
+    color: #8e8e8e;
+    padding: 0 16px;
+    font-size: 13px;
+    font-weight: 600;
+    position: relative;
+}
+
+.auth-footer {
+    text-align: center;
+}
+
+.auth-footer p {
+    color: #262626;
+    font-size: 14px;
+    margin: 0;
+}
+
+.auth-link {
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+.auth-extra {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    margin-top: 16px;
+}
+
+.auth-extra p {
+    color: #262626;
+    font-size: 14px;
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 32px 24px;
+        margin: 0 16px;
+    }
+    
+    .auth-extra {
+        margin: 16px;
+    }
+}
+</style>
