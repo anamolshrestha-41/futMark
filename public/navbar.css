@@ -1,0 +1,45 @@
+/* Navbar Styles */
+.navbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    color: #1f2937 !important;
+    font-weight: 600;
+    font-size: 1.25rem;
+    text-decoration: none;
+}
+
+.navbar-brand:hover {
+    color: #3b82f6 !important;
+}
+
+.nav-link {
+    color: #6b7280 !important;
+    font-size: 1.5rem;
+    padding: 0.5rem 0.75rem !important;
+    margin: 0 0.25rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+    background: #f3f4f6 !important;
+    color: #1f2937 !important;
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 0.25rem 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}

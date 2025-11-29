@@ -1,0 +1,26 @@
+<div class="header">
+    <div class="header-left">
+        <a href="/listings" class="header-title">FutMark</a>
+    </div>
+
+    <div class="header-right">
+        <% if (currentUser) { %>
+            <div class="user-menu">
+                <div class="user-avatar">
+                    <%= currentUser.username.charAt(0).toUpperCase() %>
+                </div>
+
+                <div class="nav-actions">
+                    <a href="/listings/new" class="add-btn">+ Match</a>
+                    <a href="/notes" class="add-btn">Notes</a>
+                </div>
+                <a href="/user/logout" class="logout-btn">Logout</a>
+            </div>
+            <% } else { %>
+                <div class="guest-menu">
+                    <a href="/user/login" class="auth-btn-nav">Login</a>
+                    <a href="/user/register" class="auth-btn-nav signup">Sign Up</a>
+                </div>
+                <% } %>
+    </div>
+</div>

@@ -1,14 +1,6 @@
-<% layout("layout/boilerPlate") %> 
+<% layout("layout/boilerPlate") %>
 
-    <div class="header">
-        <form class="header-left" action="/listings" method="get">
-            <button type="submit" class="header-title"> FutMark</button>
-        </form>
-        <a href="/listings/new" class="add-btn">+ New Match</a>
-        <a href="/notes/new" class="add-btn"> + Notes</a>
-    </div>
-
-    <div class="container">
+<div class="container">
         <% if(allNotes.length===0) { %>
             <div class="empty-state">
                 <div class="empty-icon">📓</div>
@@ -53,3 +45,4 @@
                 </div>
                 <% } %>
     </div>
+    <a href="/notes/new" class="add-btn-create">Create</a>

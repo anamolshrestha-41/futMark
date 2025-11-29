@@ -2,24 +2,30 @@ const Note=require("../models/notes")
 
 exports.home=async(req, res) => {
     try {
-        const allNotes = await Note.find({});
-        res.render("notes/Home.ejs", { allNotes });
+        const allNotes = await Note.find({owner: req.user._id});
+        res.render("notes/Home.ejs", { 
+            allNotes,
+            currentUser: res.locals.currentUser 
+        });
     } catch (err) {
         console.error("Database Error:", err.message);
-        // Fallback with empty array if database fails
-        res.render("notes/Home.ejs", { allNotes: [] });
+        res.render("notes/Home.ejs", { 
+            allNotes: [],
+            currentUser: res.locals.currentUser 
+        });
     }
 }
 
 exports.createNote=(req, res)=>{
-    res.render("notes/create.ejs");
+    res.render("notes/create.ejs", { currentUser: res.locals.currentUser });
 }
 exports.addNote= async (req,res)=>{
 try{
         let{title, description}= req.body;
         let newNote= new Note({
             title: title,
-            description: description
+            description: description,
+            owner: req.user._id
         });
         await newNote.save();
         req.flash("success", "Note created successfully!")
@@ -34,7 +40,10 @@ try{
 exports.editNote=async(req,res)=>{
     let {id}= req.params;
     await Note.findById(id).then((note)=>{
-        res.render("notes/editNote.ejs", {note});
+        res.render("notes/editNote.ejs", {
+            note,
+            currentUser: res.locals.currentUser
+        });
     }).catch((err)=>{
         res.redirect("/notes")
     })

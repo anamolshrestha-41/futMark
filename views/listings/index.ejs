@@ -1,14 +1,6 @@
-<% layout("layout/boilerPlate") %> 
+<% layout("layout/boilerPlate") %>
 
-    <div class="header">
-         <form class="header-left" action="/listings" method="get">
-            <button type="submit" class="header-title"> FutMark</button>
-        </form>
-        <a href="/listings/new" class="add-btn">+ New Match</a>
-        <a href="/notes" class="add-btn"> Notes</a>
-    </div>
-
-    <div class="container">
+<div class="container">
         <% if(allListings.length===0) { %>
             <div class="empty-state">
                 <div class="empty-icon">⚽</div>
@@ -40,7 +32,7 @@
                                                 <%= listing.time %>
                                             </div>
                                             <div class="date-text">
-                                                <%= listing.date.toLocaleDateString() %>
+                                                <%= listing.date ? new Date(listing.date).toLocaleDateString(): "No date set"%>
                                             </div>
                                         </div>
                                     </div>
@@ -61,13 +53,14 @@
                                     </div>
                                     <% } %>
                             </div>
-
+                           <% if(currentUser && listing.owner && currentUser._id.toString() === listing.owner._id.toString()){ %>
                             <div class="match-actions">
                                 <a href="/listings/<%= listing._id %>/edit" class="edit-btn">Edit Match</a>
                               <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
                                     <button class="del-btn" type="submit">Delete</button>
                               </form>
                             </div>
+                       <% } %>
 
                         </div>
                         <% }) %>

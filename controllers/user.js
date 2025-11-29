@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const generateToken = require("../utils/generateToken")
 
 exports.registerForm = (req, res) => {
-    res.render("users/register.ejs")
+    res.render("users/register.ejs", { currentUser: res.locals.currentUser })
 }
 
 exports.registerUser = async (req, res) => {
@@ -11,27 +11,38 @@ exports.registerUser = async (req, res) => {
         const { username, email, password } = req.body;
         const existedUser = await User.findOne({ email });
         if (existedUser) {
-            return res.status(400).json({ message: "User Already Existed!" })
+            req.flash("error", "User Already Exists!");
+            return res.redirect("/user/register");
         }
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new User({
-            email: email,
-            username: username,
+            username,
+            email,
             password: hashedPassword
         })
-        res.status(200).json({ message: "User Created Successfully!" })
+        await newUser.save();
+        
+        // Auto-login after registration
+        const token = generateToken(newUser);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            path: '/'
+        });
+        
         req.flash("success", "Welcome To futMark (BookMark Your Day For Futsal)");
-        res.redirect("/listings");
+        let redirectUrl = res.locals.redirectUrl || "/listings";
+        res.redirect(redirectUrl);
     }
     catch (err) {
-        res.status(500).json({ message: "Internal Server Error!" })
-        req.flash("error", error.message);
-        res.redirect("/signup");
+        req.flash("error", err.message);
+        res.redirect("/user/register");
     }
 }
 
 exports.loginForm = (req, res) => {
-    res.render("users/login.ejs")
+    res.render("users/login.ejs", { currentUser: res.locals.currentUser })
 }
 
 exports.loginUser = async (req, res) => {
@@ -39,32 +50,39 @@ exports.loginUser = async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "User Not Found!" })
+            req.flash("error", "User Not Found!");
+            return res.redirect("/user/login");
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(400).json({ message: "Invalid Password!" })
+            req.flash("error", "Invalid Password!");
+            return res.redirect("/user/login");
         }
         const token = generateToken(user);
         res.cookie("token", token, {
-            httpOnly: true,           // protects from JS access
-            secure: false,            // set true only in production on HTTPS
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
+            httpOnly: true,
+            secure: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            path: '/'
         });
-        res.status(200).json({ message: "User Logged In Successfully!", token })
+        
+        req.flash("success", `Welcome back, ${user.username}!`);
         let redirectUrl = res.locals.redirectUrl || "/listings";
         res.redirect(redirectUrl);
     }
     catch (err) {
-        res.status(500).json({ message: "Internal Server Error!" })
+         req.flash("error", err.message);
+        res.redirect("/user/login");
     }
 }
 
 exports.logoutUser = async (req, res) => {
     try {
-        res.status(200).json({ message: "User Logged Out Successfully!" })
-    }
-    catch (err) {
-        res.status(500).json({ message: "Internal Server Error!" })
+        res.clearCookie("token");
+        req.flash("success", "Logged Out Successfully!");
+        res.redirect("/user/login");
+    } catch (err) {
+        req.flash("error", err.message);
+        res.redirect("/user/login");
     }
 }

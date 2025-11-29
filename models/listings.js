@@ -44,6 +44,11 @@ const listingSchema = new Schema({
     listOfPlayers: {
         type: [String],
         default: []
+    },
+
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
 });
 

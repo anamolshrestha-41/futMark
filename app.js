@@ -12,6 +12,7 @@ const ejs = require("ejs");
 const flash= require("connect-flash");
 const expressSession= require("express-session");
 const cookie= require("cookie-parser");
+const jwt = require('jsonwebtoken');
 
 //model
 const User= require("./models/user");
@@ -47,7 +48,7 @@ app.engine("ejs", ejsMate);
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(cookie())
+app.use(cookie());
 //session
 const sessionOptions=({
     secret: process.env.SECRET,
@@ -67,6 +68,25 @@ app.use(expressSession(sessionOptions));
 
 //flash
 app.use(flash());
+
+// Global middleware to check authentication status
+app.use(async (req, res, next) => {
+    const token = req.cookies.token;
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const user = await User.findById(decoded.id);
+            res.locals.currentUser = user;
+            req.user = user;
+        } catch (err) {
+            res.locals.currentUser = null;
+        }
+    } else {
+        res.locals.currentUser = null;
+    }
+    next();
+});
+
 app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
@@ -74,11 +94,14 @@ app.use((req,res,next)=>{
 })
 
 
+
+
 // app.get("/",(req, res)=>{
 //     res.send("Add /listings at top url for homepage.")
 // })
 
 // app.use("/user", userRouter)
+app.use("/user", userRouter)
 app.use("/listings", listingRouter);
 app.use("/notes", noteRouter);
 

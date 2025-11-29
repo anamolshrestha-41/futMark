@@ -1,6 +1,6 @@
 const mongoose= require("mongoose");
-const { type } = require("os");
-
+const Listing= require("./listings.js")
+const Note= require("./notes.js");
 const Schema= mongoose.Schema;
 
 const userSchema= new Schema({
@@ -25,4 +25,15 @@ const userSchema= new Schema({
         lowercase:true
     }
 })
-module.exports= mongoose.model("User", userSchema);
+
+userSchema.post("findOneAndDelete", async(user)=>{
+    if(user){
+        await Listing.deleteMany({owner: user._id});
+        await Note.deleteMany({owner: user._id});
+        console.log("User and associated listings and notes deleted");
+    }
+})
+
+const User= mongoose.model("User", userSchema);
+module.exports= User;
+

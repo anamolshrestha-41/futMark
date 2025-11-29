@@ -2,16 +2,22 @@ const Listing = require("../models/listings")
 
 exports.index= async(req, res) => {
     try {
-        const allListings = await Listing.find({});
-        res.render("listings/index.ejs", { allListings });
+        const allListings = await Listing.find({}).populate('owner');
+        res.render("listings/index.ejs", { 
+            allListings,
+            currentUser: res.locals.currentUser 
+        });
     } catch (err) {
         console.error("Database Error:", err.message);
-        res.render("listings/index.ejs", { allListings: [] });
+        res.render("listings/index.ejs", { 
+            allListings: [],
+            currentUser: res.locals.currentUser 
+        });
     }
 }
 
 exports.new_listing=(req, res)=>{
-    res.render("listings/new.ejs");
+    res.render("listings/new.ejs", { currentUser: res.locals.currentUser });
 }
 
 exports.createListing=async(req, res)=>{
@@ -23,25 +29,27 @@ exports.createListing=async(req, res)=>{
             time: time,
             date:date,
             place: place,
-            listOfPlayers: players ? players.split(",").map(p => p.trim()) : []
+            listOfPlayers: players ? players.split(",").map(p => p.trim()) : [],
+            owner: req.user._id
         });
         await newListing.save();
-                req.flash("success", "Match created successfully!")
-
+        req.flash("success", "Match created successfully!")
         res.redirect("/listings");
-
     }
     catch(err){
-          console.error("Database Error:", err.message);
-        // Fallback with empty array if database fails
-        res.render("listings/index.ejs", { allListings: [] });
+        console.error("Database Error:", err.message);
+        req.flash("error", "Failed to create match!");
+        res.redirect("/listings/new");
     }
 }
 
 exports.editListing=async(req, res)=>{
     let {id}= req.params;
     await Listing.findById(id).then((listing)=>{
-        res.render("listings/edit.ejs", {listing})
+        res.render("listings/edit.ejs", {
+            listing,
+            currentUser: res.locals.currentUser
+        })
     }). catch((err)=>{
         res.redirect("/listings")
     })
